@@ -39,24 +39,13 @@ public class Robot extends SampleRobot {
 
     }
 
-	/**
-	 * This autonomous (along with the chooser code above) shows how to select between different autonomous modes
-	 * using the dashboard. The sendable chooser code works with the Java SmartDashboard. If you prefer the LabVIEW
-	 * Dashboard, remove all of the chooser code and uncomment the getString line to get the auto name from the text box
-	 * below the Gyro
-	 *
-	 * You can add additional auto modes by adding additional comparisons to the if-else structure below with additional strings.
-	 * If using the SendableChooser make sure to add them to the chooser code above as well.
-	 */
     public void autonomous() {
     	
     	
     	
     }
 
-    /**
-     * Runs the motors with arcade steering.
-     */
+
     public void operatorControl() {
 
         
@@ -69,10 +58,12 @@ public class Robot extends SampleRobot {
     public void test() {
     	XBoxController stick = new XBoxController(0);
     	int canID = 1;
+    	double motorPower = .1;
     	SmartDashboard.putNumber("CAN ID", canID);
     	while(isTest() && isEnabled()) 
     	{
     		stick.update();
+    		//change talon that is tested
     		if(stick.onPress(Button.aButton))
     		{
     			if (canID >= 8) {
@@ -83,10 +74,20 @@ public class Robot extends SampleRobot {
     			}
     			SmartDashboard.putNumber("CAN ID", canID);
     		}
+    		//run talon forward
     		if(stick.onPress(Button.bButton))
     		{
     			CANTalon talon = new CANTalon(canID);
-    			talon.set(.1);
+    			talon.set(motorPower);
+    			Timer.delay(3);
+    			talon.set(0);
+    			talon = null;
+    		}
+    		//run talon backward
+    		if(stick.onPress(Button.xButton))
+    		{
+    			CANTalon talon = new CANTalon(canID);
+    			talon.set(-motorPower);
     			Timer.delay(3);
     			talon.set(0);
     			talon = null;
